@@ -67,53 +67,56 @@
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
-
-        /* Full height fix for mobile browsers */
-        .h-dvh {
-            height: 100vh; /* Fallback */
-            height: 100dvh;
-        }
     </style>
 </head>
-<body id="body" class="h-dvh w-full flex justify-center bg-gray-900 font-sans select-none overflow-hidden">
+<body id="body" class="min-h-screen w-full flex items-center justify-center p-4 bg-gray-900 font-sans select-none">
 
     <!-- Hidden H1 for SEO -->
     <h1 class="sr-only">Mobile Calculator App - เครื่องคิดเลขมือถือออนไลน์ ใช้งานง่าย</h1>
 
-    <!-- App Container (Responsive: Fullscreen on Mobile, Centered Card on Desktop) -->
-    <div id="app-container" class="relative w-full max-w-md h-full flex flex-col bg-black text-white transition-colors duration-300 md:h-[90vh] md:my-auto md:rounded-[2rem] md:shadow-2xl md:border md:border-gray-800/50">
+    <!-- Mobile Device Container (With Frame) -->
+    <div id="device-frame" class="relative w-[360px] h-[740px] rounded-[3rem] shadow-2xl overflow-hidden border-8 border-gray-800 flex flex-col bg-black text-white transition-colors duration-300">
         
+        <!-- Status Bar -->
+        <div class="h-8 w-full flex justify-between items-center px-6 pt-3 text-xs font-medium opacity-80 z-20">
+            <span>9:41</span>
+            <div class="flex space-x-1.5">
+                <div class="w-4 h-2.5 bg-current rounded-sm"></div>
+                <div class="w-0.5 h-1.5 bg-current rounded-sm"></div>
+            </div>
+        </div>
+
         <!-- Top Header Controls -->
-        <div class="absolute top-0 w-full px-6 py-6 flex justify-between items-center z-20">
+        <div class="absolute top-12 w-full px-6 flex justify-between items-center z-20">
             <!-- History Button -->
-            <button id="btn-history" class="p-3 rounded-full transition-colors bg-gray-800 hover:bg-gray-700 text-amber-500" aria-label="View History / ดูประวัติ">
-                <i data-lucide="history" width="24" height="24"></i>
+            <button id="btn-history" class="p-2 rounded-full transition-colors bg-gray-800 hover:bg-gray-700 text-amber-500" aria-label="View History / ดูประวัติ">
+                <i data-lucide="history" width="20" height="20"></i>
             </button>
 
             <!-- Mode Switch -->
-            <button id="btn-theme" class="p-3 rounded-full transition-colors bg-gray-800 hover:bg-gray-700" aria-label="Toggle Dark Mode / เปลี่ยนธีม">
+            <button id="btn-theme" class="p-2 rounded-full transition-colors bg-gray-800 hover:bg-gray-700" aria-label="Toggle Dark Mode / เปลี่ยนธีม">
                 <!-- Icon will be toggled by JS -->
-                <i id="icon-theme" data-lucide="sun" width="24" height="24"></i>
+                <i id="icon-theme" data-lucide="sun" width="20" height="20"></i>
             </button>
         </div>
 
         <!-- History Overlay -->
-        <div id="history-overlay" class="absolute inset-0 z-30 transition-transform duration-300 transform translate-y-full bg-gray-900 md:rounded-[2rem]">
-            <div class="p-6 pt-8 h-full flex flex-col">
-                <div class="flex justify-between items-center mb-6 mt-4">
-                    <span class="text-2xl font-bold">History</span>
+        <div id="history-overlay" class="absolute inset-0 z-30 transition-transform duration-300 transform translate-y-full bg-gray-900">
+            <div class="p-6 pt-12 h-full flex flex-col">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-xl font-bold">History</span>
                     <div class="flex gap-2">
-                        <button id="btn-clear-history" class="p-3 text-red-500 hover:bg-red-500/10 rounded-full transition-colors" aria-label="Clear History">
-                            <i data-lucide="trash-2" width="24" height="24"></i>
+                        <button id="btn-clear-history" class="p-2 text-red-500 hover:bg-red-500/10 rounded-full transition-colors" aria-label="Clear History">
+                            <i data-lucide="trash-2" width="20" height="20"></i>
                         </button>
-                        <button id="btn-close-history" class="p-3 rounded-full bg-gray-800 transition-colors" aria-label="Close History">
-                            <i data-lucide="x" width="24" height="24"></i>
+                        <button id="btn-close-history" class="p-2 rounded-full bg-gray-800 transition-colors" aria-label="Close History">
+                            <i data-lucide="x" width="20" height="20"></i>
                         </button>
                     </div>
                 </div>
                 
                 <!-- History List Container -->
-                <div id="history-list" class="flex-1 overflow-y-auto space-y-3 no-scrollbar pb-8">
+                <div id="history-list" class="flex-1 overflow-y-auto space-y-4 no-scrollbar pb-4">
                     <!-- Empty State (Default) -->
                     <div id="history-empty" class="flex flex-col items-center justify-center h-full opacity-40">
                         <i data-lucide="history" width="48" height="48" class="mb-2"></i>
@@ -125,20 +128,23 @@
         </div>
 
         <!-- Display Area -->
-        <div class="flex-1 flex flex-col justify-end items-end px-6 pb-6 space-y-2 relative z-10 w-full">
+        <div class="flex-1 flex flex-col justify-end items-end px-8 pb-6 space-y-2 relative z-10">
             <!-- Previous Value Display -->
-            <div id="display-prev" class="text-xl font-light h-8 transition-colors text-gray-400"></div>
+            <div id="display-prev" class="text-lg font-light h-8 transition-colors text-gray-400"></div>
             
             <!-- Main Input Display -->
-            <div class="w-full flex justify-end items-end gap-2 overflow-hidden">
-                <span id="display-main" class="text-7xl font-light tracking-tight break-all leading-none transition-all">0</span>
+            <div class="w-full flex justify-end items-end gap-2">
+                <span id="display-main" class="text-6xl font-light tracking-tight break-all leading-none transition-all">0</span>
             </div>
         </div>
 
         <!-- Keypad Area -->
-        <div id="keypad-bg" class="h-[60%] md:h-auto md:aspect-[3/4] md:rounded-b-[2rem] rounded-t-[2.5rem] p-6 pb-10 md:pb-8 grid grid-cols-4 gap-4 relative z-10 bg-gray-900 transition-colors duration-300">
+        <div id="keypad-bg" class="h-[60%] rounded-t-[2.5rem] p-6 pb-10 grid grid-cols-4 gap-4 relative z-10 bg-gray-900 transition-colors duration-300">
             <!-- Buttons are generated by JS to maintain structure -->
         </div>
+
+        <!-- Bottom Home Indicator -->
+        <div id="home-indicator" class="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-1/3 h-1.5 rounded-full opacity-50 z-20 bg-white transition-colors duration-300"></div>
 
     </div>
 
@@ -153,7 +159,7 @@
 
         // DOM Elements
         const body = document.getElementById('body');
-        const appContainer = document.getElementById('app-container');
+        const deviceFrame = document.getElementById('device-frame');
         const keypadBg = document.getElementById('keypad-bg');
         const displayMain = document.getElementById('display-main');
         const displayPrev = document.getElementById('display-prev');
@@ -165,6 +171,7 @@
         const btnClearHistory = document.getElementById('btn-clear-history');
         const historyList = document.getElementById('history-list');
         const historyEmpty = document.getElementById('history-empty');
+        const homeIndicator = document.getElementById('home-indicator');
 
         // Helper: Format Number
         const formatNumber = (num) => {
@@ -182,15 +189,13 @@
         const updateDisplay = () => {
             // Main Display
             displayMain.textContent = formatNumber(input);
-            
-            // Dynamic Font Size Scaling
-            const length = input.replace(/,/g, '').length;
-            if (length > 9) {
-                displayMain.className = "text-4xl font-light tracking-tight break-all leading-none transition-all";
-            } else if (length > 6) {
-                displayMain.className = "text-5xl font-light tracking-tight break-all leading-none transition-all";
+            // Adjust font size based on length
+            if (input.replace(',', '').length > 7) {
+                displayMain.classList.remove('text-6xl');
+                displayMain.classList.add('text-4xl');
             } else {
-                displayMain.className = "text-7xl font-light tracking-tight break-all leading-none transition-all";
+                displayMain.classList.remove('text-4xl');
+                displayMain.classList.add('text-6xl');
             }
 
             // Previous Display
@@ -206,6 +211,7 @@
         const renderHistory = () => {
             if (history.length === 0) {
                 historyEmpty.style.display = 'flex';
+                // Remove existing items except empty state
                 Array.from(historyList.children).forEach(child => {
                     if (child.id !== 'history-empty') child.remove();
                 });
@@ -213,12 +219,14 @@
             }
 
             historyEmpty.style.display = 'none';
+            
+            // Clear list (except empty placeholder if we were keeping it, but simpler to rebuild)
             historyList.innerHTML = ''; 
-            historyList.appendChild(historyEmpty); 
+            historyList.appendChild(historyEmpty); // Put empty back but hidden
 
             history.forEach(item => {
                 const itemDiv = document.createElement('div');
-                itemDiv.className = `flex flex-col items-end p-4 rounded-xl cursor-pointer active:scale-95 transition-transform mb-2 ${darkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-gray-50 hover:bg-gray-100'}`;
+                itemDiv.className = `flex flex-col items-end p-4 rounded-xl cursor-pointer active:scale-95 transition-transform mb-2 ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`;
                 
                 const expressionSpan = document.createElement('span');
                 expressionSpan.className = `text-sm mb-1 ${darkMode ? 'text-gray-400' : 'text-gray-500'}`;
@@ -246,7 +254,7 @@
             if (darkMode) {
                 // Backgrounds
                 body.classList.remove('bg-gray-100'); body.classList.add('bg-gray-900');
-                appContainer.classList.remove('bg-white', 'text-gray-900'); appContainer.classList.add('bg-black', 'text-white');
+                deviceFrame.classList.remove('bg-white', 'text-gray-900'); deviceFrame.classList.add('bg-black', 'text-white');
                 keypadBg.classList.remove('bg-gray-100'); keypadBg.classList.add('bg-gray-900');
                 historyOverlay.classList.remove('bg-white'); historyOverlay.classList.add('bg-gray-900');
                 
@@ -257,14 +265,14 @@
                 btnTheme.classList.remove('bg-gray-200', 'hover:bg-gray-300'); btnTheme.classList.add('bg-gray-800', 'hover:bg-gray-700');
                 btnHistory.classList.remove('bg-gray-200', 'hover:bg-gray-300', 'text-amber-600'); btnHistory.classList.add('bg-gray-800', 'hover:bg-gray-700', 'text-amber-500');
                 btnCloseHistory.classList.remove('bg-gray-200'); btnCloseHistory.classList.add('bg-gray-800');
+                homeIndicator.classList.remove('bg-black'); homeIndicator.classList.add('bg-white');
                 
-                // Re-render components that depend on theme state
                 renderButtons(); 
-                renderHistory(); 
+                renderHistory();
             } else {
                 // Light Mode
                 body.classList.remove('bg-gray-900'); body.classList.add('bg-gray-100');
-                appContainer.classList.remove('bg-black', 'text-white'); appContainer.classList.add('bg-white', 'text-gray-900');
+                deviceFrame.classList.remove('bg-black', 'text-white'); deviceFrame.classList.add('bg-white', 'text-gray-900');
                 keypadBg.classList.remove('bg-gray-900'); keypadBg.classList.add('bg-gray-100');
                 historyOverlay.classList.remove('bg-gray-900'); historyOverlay.classList.add('bg-white');
                 
@@ -273,6 +281,7 @@
                 btnTheme.classList.remove('bg-gray-800', 'hover:bg-gray-700'); btnTheme.classList.add('bg-gray-200', 'hover:bg-gray-300');
                 btnHistory.classList.remove('bg-gray-800', 'hover:bg-gray-700', 'text-amber-500'); btnHistory.classList.add('bg-gray-200', 'hover:bg-gray-300', 'text-amber-600');
                 btnCloseHistory.classList.remove('bg-gray-800'); btnCloseHistory.classList.add('bg-gray-200');
+                homeIndicator.classList.remove('bg-white'); homeIndicator.classList.add('bg-black');
 
                 renderButtons();
                 renderHistory();
@@ -289,7 +298,7 @@
                     input = num.toString();
                 } else {
                     if (num === '.' && input.includes('.')) return;
-                    if (input.replace(',', '').length > 12) return; // Increased limit slightly for fullscreen
+                    if (input.replace(',', '').length > 9) return;
                     input += num;
                 }
             }
@@ -335,11 +344,12 @@
             result = parseFloat(result.toPrecision(10));
             const resultStr = String(result);
 
+            // History
             const historyItem = {
                 expression: `${formatNumber(previous)} ${operator} ${formatNumber(current)}`,
                 result: formatNumber(resultStr)
             };
-            history.unshift(historyItem);
+            history.unshift(historyItem); // Add to front
             if (history.length > 20) history.pop();
 
             input = resultStr;
@@ -373,6 +383,7 @@
             updateDisplay();
         };
 
+        // Button Configuration
         const buttonConfig = [
             { label: 'AC', type: 'func', action: handleClear },
             { label: '+/-', type: 'func', action: handleToggleSign },
@@ -397,15 +408,16 @@
 
         const renderButtons = () => {
             const keypad = document.getElementById('keypad-bg');
-            keypad.innerHTML = '';
+            keypad.innerHTML = ''; // Clear existing
 
             buttonConfig.forEach(btn => {
                 const button = document.createElement('button');
                 button.textContent = btn.label;
                 button.setAttribute('aria-label', btn.label);
                 
-                let btnClass = "rounded-full flex items-center justify-center text-3xl font-medium transition-all duration-200 active:scale-95 shadow-sm select-none";
+                let btnClass = "rounded-full flex items-center justify-center text-2xl font-medium transition-all duration-200 active:scale-95 shadow-sm select-none";
                 
+                // Color Logic
                 if (btn.type === 'num') {
                     btnClass += darkMode 
                         ? " bg-gray-800 text-white hover:bg-gray-700" 
@@ -414,11 +426,13 @@
                     btnClass += " bg-gray-300 text-black hover:bg-gray-200";
                 } else if (btn.type === 'op' || btn.type === 'eq') {
                     btnClass += " bg-amber-500 text-white hover:bg-amber-400";
+                    // Active Operator State
                     if (btn.type === 'op' && operator === btn.label && !resetNext) {
-                         btnClass = "rounded-full flex items-center justify-center text-3xl font-medium transition-all duration-200 bg-white text-amber-500 border-2 border-amber-500 select-none"; 
+                         btnClass = "rounded-full flex items-center justify-center text-2xl font-medium transition-all duration-200 bg-white text-amber-500 border-2 border-amber-500 select-none"; 
                     }
                 }
 
+                // Span Logic
                 if (btn.span === 2) {
                     btnClass += " col-span-2 w-full aspect-[2.1/1] justify-start pl-8";
                 } else {
@@ -431,6 +445,7 @@
             });
         };
 
+        // Event Listeners for UI Controls
         const toggleHistory = (show) => {
             if (show) {
                 historyOverlay.classList.remove('translate-y-full');
@@ -451,8 +466,9 @@
 
         btnTheme.onclick = () => {
             darkMode = !darkMode;
-            btnTheme.innerHTML = `<i data-lucide="${darkMode ? 'sun' : 'moon'}" width="24" height="24"></i>`;
-            lucide.createIcons();
+            // Update Icon
+            btnTheme.innerHTML = `<i data-lucide="${darkMode ? 'sun' : 'moon'}" width="20" height="20"></i>`;
+            lucide.createIcons(); // Refresh new icon
             updateThemeUI();
         };
 
